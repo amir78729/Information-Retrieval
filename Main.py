@@ -31,17 +31,24 @@ for i in range(2):
         term = term.replace('.', '')
         term = term.replace(':', '')
         term = term.replace('،', '')
-
         term_doc_id.append((term, i + 1))
 
-all_tokens = list(dict.fromkeys([t[0] for t in get_list_without_redundancy(sort_tuple(term_doc_id))]))
-print(all_tokens)
-term_doc_id = (sort_tuple(term_doc_id))
+term_doc_id = sort_tuple(term_doc_id)
+all_tokens = list(dict.fromkeys([t[0] for t in get_list_without_redundancy(term_doc_id)]))
+# print(all_tokens)
 
+count = {}
 for i in all_tokens:
-    print(i)
+    # print(i)
+    freq = 0
+    for j in term_doc_id:
+        if j[0] == i:
+            freq += 1
+    # print(freq)
+    count.update({i: freq})
+print(count["و"])
 # for size in 1, 2:
-#     all_counts[size] = FreqDist(ngrams(content, size))
+#     all_counts[size] = FreDist(ngrams(content, size))
 # tokens.append(all_counts[1].B())
 
 
