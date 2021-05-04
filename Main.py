@@ -6,6 +6,11 @@ from nltk import ngrams, FreqDist
 def sort_tuple(tup):
     return (sorted(tup, key=lambda x: x[0]))
 
+
+def get_list_without_redundancy(lst):
+    return list(dict.fromkeys(lst))
+
+
 path = 'IR_Spring2021_ph12_7k.xlsx'
 path = 'demo data.xlsx'
 
@@ -23,12 +28,17 @@ term_doc_id = []
 for i in range(2):
     doc_terms = content[i].split()
     for term in doc_terms:
+        term = term.replace('.', '')
+        term = term.replace(':', '')
+        term = term.replace('،', '')
+
         term_doc_id.append((term, i + 1))
 
-# sort by term
-term_doc_id = sort_tuple(term_doc_id)
+all_tokens = list(dict.fromkeys([t[0] for t in get_list_without_redundancy(sort_tuple(term_doc_id))]))
+print(all_tokens)
+term_doc_id = (sort_tuple(term_doc_id))
 
-for i in term_doc_id:
+for i in all_tokens:
     print(i)
 # for size in 1, 2:
 #     all_counts[size] = FreqDist(ngrams(content, size))
