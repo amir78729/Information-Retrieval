@@ -10,6 +10,22 @@ def sort_tuple(tup):
 def get_list_without_redundancy(lst):
     return list(dict.fromkeys(lst))
 
+def create_inverted_index(term_doc_id):
+    res = {}
+    for x in term_doc_id:
+        if not x[0] in res.keys():
+            list = []
+            list.append(x[1])
+            res.update({x[0]: list})
+        else:
+            list = res[x[0]]
+            list.append(x[1])
+            res.update({x[0]: list})
+
+    # print(type(res))
+    for r in res.keys():
+        print(r, res[r])
+    # print(res)
 
 path = 'IR_Spring2021_ph12_7k.xlsx'
 path = 'demo data.xlsx'
@@ -34,6 +50,9 @@ for i in range(2):
         term_doc_id.append((term, i + 1))
 
 term_doc_id = sort_tuple(term_doc_id)
+
+create_inverted_index(term_doc_id)
+
 all_tokens = list(dict.fromkeys([t[0] for t in get_list_without_redundancy(term_doc_id)]))
 # print(all_tokens)
 
@@ -46,7 +65,9 @@ for i in all_tokens:
             freq += 1
     # print(freq)
     count.update({i: freq})
-print(count["و"])
+
+
+# print(count["و"])
 # for size in 1, 2:
 #     all_counts[size] = FreDist(ngrams(content, size))
 # tokens.append(all_counts[1].B())
