@@ -6,12 +6,17 @@ from nltk import ngrams, FreqDist
 class SearchEngine:
     def __init__(self):
         path = 'IR_Spring2021_ph12_7k.xlsx'
-        # path = 'demo data.xlsx'
+        path = 'demo data.xlsx'
 
         self.data = pd.read_excel(path)
         self.doc_id = self.data['id'].tolist()
         self.content = self.data['content'].tolist()
         self.url = self.data['url'].tolist()
+
+        self.symbols_to_be_removed = ' . : ، \" \' | \\ / * ) ( ! -'.split()
+
+        self.stemming_conversion_dictionary = self.stemming_dictionary()
+
 
 
         # reading exception words from file
@@ -21,6 +26,24 @@ class SearchEngine:
     # Function to sort the list by second item of tuple
     def sort_tuple(self, tup):
         return sorted(tup, key=lambda x: x[0])
+
+    def stemming_dictionary(self):
+        with open('stemming_conversion.txt', 'r', encoding='utf-8') as stems:
+            dictionary = dict()
+            maazi_suffixes = ['م', 'ی', '', 'یم', 'ید', 'ند', 'ن']
+            mozare_suffixes = ['م', 'ی', 'د', 'یم', 'ید', 'ند']
+            lines = stems.readlines()
+            for l in tqdm(lines, 'STEMMING PROCCESS'):
+                bon_maazi, bon_mozare = l.split()
+                for s in maazi_suffixes:
+                    dictionary.update({bon_maazi + s: bon_maazi})
+                    dictionary.update({'ن' + bon_maazi + s: bon_maazi})
+                for s in mozare_suffixes:
+                    dictionary.update({bon_mozare + s: bon_mozare})
+                    dictionary.update({'ب' + bon_mozare + s: bon_mozare})
+                    dictionary.update({'ن' + bon_mozare + s: bon_mozare})
+                    # print('خواه' + s + " " + bon_maazi)
+            return dictionary
 
 
     def remove_suffix(self, s, suffix):
@@ -34,7 +57,7 @@ class SearchEngine:
 
 
     def normalize(self, word):
-        suffixes = [ 'ات', 'ها', 'ی']
+        suffixes = ['ترین', 'تر', 'ات', 'ها', 'ی']
         for s in suffixes:
             if word.endswith(s):
                 if word not in self.normalization_exceptions:
@@ -85,13 +108,22 @@ class SearchEngine:
 
             # process tokens
             for term in doc_terms:
-                term = term.replace('.', '')
-                term = term.replace(':', '')
-                term = term.replace('،', '')
-                term = term.replace('"', '')
-                term = term.replace('*', '')
-                term.strip()
+                term = term.strip()
+                # term = term.replace('.', '')
+                # term = term.replace(':', '')
+                # term = term.replace('،', '')
+                # term = term.replace('"', '')
+                # term = term.replace('*', '')
+                # term = term.replace(')', '')
+                # term = term.replace('(', '')
+                # term = term.replace('!', '')
+                # term = term.replace('-', '')
+                for symbol in self.symbols_to_be_removed:
+                    term = term.replace(symbol, '')
+
                 term = self.normalize(term)
+
+                term = self.stemming_processing(term)
 
                 # add {TERM: DocID} to our dictionary
                 term_doc_id.append((term, i + 1))
@@ -102,7 +134,6 @@ class SearchEngine:
 
         all_tokens = list(dict.fromkeys([t[0] for t in self.get_list_without_redundancy(term_doc_id)]))
         # print(all_tokens)
-
 
         frequency = self.calculate_frequency(all_tokens, term_doc_id)
 
@@ -116,5 +147,13 @@ class SearchEngine:
 
         # df = pd.DataFrame(data, columns=['id'])
         # print(df)
+
+    def stemming_processing(self, term):
+        if term in self.stemming_conversion_dictionary.keys():
+            return self.stemming_conversion_dictionary[term]
+        else:
+            return term
+
+
 if __name__ == '__main__':
     SearchEngine().main()
