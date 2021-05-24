@@ -15,7 +15,8 @@ class SearchEngine:
 
         self.symbols_to_be_removed = ' . : ، \" \' | \\ / * ) ( ! -'.split()
 
-        self.stemming_conversion_dictionary = self.stemming_dictionary()
+        self.stemming_conversion_dictionary = self.get_stemming_dictionary()
+        self.mokassar_plurals_dictionary = self.get_mokassar_plurals_dictionary()
 
 
 
@@ -27,7 +28,7 @@ class SearchEngine:
     def sort_tuple(self, tup):
         return sorted(tup, key=lambda x: x[0])
 
-    def stemming_dictionary(self):
+    def get_stemming_dictionary(self):
         with open('stemming_conversion.txt', 'r', encoding='utf-8') as stems:
             dictionary = dict()
             maazi_suffixes = ['م', 'ی', '', 'یم', 'ید', 'ند', 'ن']
@@ -43,6 +44,15 @@ class SearchEngine:
                     dictionary.update({'ب' + bon_mozare + s: bon_mozare})
                     dictionary.update({'ن' + bon_mozare + s: bon_mozare})
                     # print('خواه' + s + " " + bon_maazi)
+            return dictionary
+
+    def get_mokassar_plurals_dictionary(self):
+        with open('mokassar_plurals.txt', 'r', encoding='utf-8') as stems:
+            dictionary = dict()
+            lines = stems.readlines()
+            for l in tqdm(lines, 'GETTING MOKASSAR PLURALS'):
+                singular, plural = l.split()
+                dictionary.update({plural: singular})
             return dictionary
 
 
@@ -125,6 +135,8 @@ class SearchEngine:
 
                 term = self.stemming_processing(term)
 
+                term = self.mokassar_plurals_processing(term)
+
                 # add {TERM: DocID} to our dictionary
                 term_doc_id.append((term, i + 1))
 
@@ -137,7 +149,7 @@ class SearchEngine:
 
         frequency = self.calculate_frequency(all_tokens, term_doc_id)
 
-        print(frequency)
+        # print(frequency)
 
         # print(count["و"])
         # for size in 1, 2:
@@ -151,6 +163,12 @@ class SearchEngine:
     def stemming_processing(self, term):
         if term in self.stemming_conversion_dictionary.keys():
             return self.stemming_conversion_dictionary[term]
+        else:
+            return term
+
+    def mokassar_plurals_processing(self, term):
+        if term in self.mokassar_plurals_dictionary.keys():
+            return self.mokassar_plurals_dictionary[term]
         else:
             return term
 
