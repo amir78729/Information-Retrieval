@@ -1,6 +1,5 @@
 import pandas as pd
 from tqdm import tqdm
-from nltk import ngrams, FreqDist
 
 
 class SearchEngine:
@@ -13,15 +12,19 @@ class SearchEngine:
         self.content = self.data['content'].tolist()
         self.url = self.data['url'].tolist()
 
-        self.FA_NUMS = '۱ ۲ ۳ ۴ ۵ ۶ ۷ ۸ ۹ ۰'.split()
-        self.EN_NUMS = '1 2 3 4 5 6 7 8 9 0'.split()
+        # constants
+        self.FA_NUMS = '۱ ۲ ۳ ۴ ۵ ۶ ۷ ۸ ۹ ٠ ۰'.split()
+        self.EN_NUMS = '1 2 3 4 5 6 7 8 9 0 0'.split()
+        self.SYMBOLS_TO_BE_REMOVED = '_ + = & ؟ ^ % $ . : ، \" \' | \\ / * ) ( ! - ؛'.split()
+        self.STOPWORDS_LIMIT = 10
 
-        self.symbols_to_be_removed = ' . : ، \" \' | \\ / * ) ( ! - ؛'.split()
-
+        # dictionaries
         self.stemming_conversion_dictionary = self.get_stemming_dictionary()
         self.mokassar_plurals_dictionary = self.get_mokassar_plurals_dictionary()
 
         self.all_tokens_frequencies = {}
+
+        self.stopwords = []
 
         # reading exception words from file
         with open('normalization_exceptions.txt', 'r', encoding='utf-8') as file:
@@ -30,35 +33,14 @@ class SearchEngine:
         # create term-DocID dictionary
         self.term_doc_id = []
         # for i in tqdm(range(len(self.content)), "PROCESSING ALL DOCUMENTS"):
-        for i in tqdm(range(1000), "PROCESSING ALL DOCUMENTS"):
+        for i in tqdm(range(100), "PROCESSING ALL DOCUMENTS"):
             # make a list of words retrieved from content
             doc_terms = self.content[i].split()
 
             # process tokens
             for term in doc_terms:
 
-                # removing whitespaces
-                term = term.strip()
-
-                # make english terms lowercase
-                term = term.lower()
-
-                # removing symbols
-                for symbol in self.symbols_to_be_removed:
-                    term = term.replace(symbol, '')
-
-                # removing suffixes
-                term = self.removing_suffixes(term)
-
-                # changing verbs to stems ( بن مضارع / بن ماضی )
-                term = self.stemming_processing(term)
-
-                # change mokassar plurals into singular form
-                term = self.mokassar_plurals_processing(term)
-
-                # change persian numbers into english numbers
-                for fa, en in zip(self.FA_NUMS, self.EN_NUMS):
-                    term = term.replace(fa, en)
+                term = self.normalize(term)
 
                 # add {TERM: DocID} to our dictionary
                 self.term_doc_id.append((term, i + 1))
@@ -76,6 +58,14 @@ class SearchEngine:
         self.inverted_index = self.create_inverted_index(self.term_doc_id)
 
         self.all_tokens_frequencies = dict(sorted(self.all_tokens_frequencies.items(), key=lambda x: x[1]))
+
+        # removing stopwords
+        [self.stopwords.append(list(self.all_tokens_frequencies.keys())[-1 - sw])
+         for sw in tqdm(range(self.STOPWORDS_LIMIT), desc='FINDING ALL OF STOPWORDS')]
+        print('STOPWORDS: {  ', end='')
+        [print(sw, end='\t') for sw in self.stopwords]
+        print('}')
+        [self.inverted_index.pop(sw) for sw in tqdm(self.stopwords, desc='REMOVING SOME STOPWORDS ')]
 
 
 
@@ -126,7 +116,7 @@ class SearchEngine:
         return list(dict.fromkeys(lst))
 
     def removing_suffixes(self, word):
-        suffixes = ['ترین', 'تر', 'ات', 'ها', 'ی']
+        suffixes = ['ترین', 'تر', 'ات', 'ها', 'ی', '‌شان', 'ان']
         for s in suffixes:
             if word.endswith(s):
                 if word not in self.normalization_exceptions:
@@ -170,11 +160,74 @@ class SearchEngine:
         else:
             return term
 
+    def normalize(self, term):
+        # removing whitespaces
+        term = term.strip()
+
+        # case folding for english words
+        term = term.lower()
+
+        # removing symbols
+        for symbol in self.SYMBOLS_TO_BE_REMOVED:
+            term = term.replace(symbol, '')
+
+        # removing suffixes
+        term = self.removing_suffixes(term)
+
+        # changing verbs to stems ( بن مضارع / بن ماضی )
+        term = self.stemming_processing(term)
+
+        # change mokassar plurals into singular form
+        term = self.mokassar_plurals_processing(term)
+
+        # change persian numbers into english numbers
+        for fa, en in zip(self.FA_NUMS, self.EN_NUMS):
+            term = term.replace(fa, en)
+
+        return term
+
     def main(self):
-        print('NUMBER OF TOKENS: {} ({} DISTINCT VALUES)'
-              .format(len(self.term_doc_id), len(self.all_tokens_frequencies)))
-        for i in self.all_tokens_frequencies.keys():
-            print(i, self.all_tokens_frequencies[i])
+        print('NUMBER OF TOKENS: {} ({} DISTINCT VALUES WITHOUT STOPWORDS)'
+              .format(len(self.term_doc_id), len(self.inverted_index)))
+        # for i in self.all_tokens_frequencies.keys():
+        #     print(i, self.all_tokens_frequencies[i])
+        # for i in self.inverted_index.keys():
+        #     print(i, self.inverted_index[i])
+        while True:
+            query = self.normalize(input('enter a query (\"\\q\": quit the program)'.upper()))
+            if query == '\\Q':
+                break
+            else:
+                try:
+                    if query in self.stopwords:
+                        print('this word is a stopword'.upper())
+                    else:
+                        result = list(set(self.inverted_index[query]))
+                        print('{} result(s):'.format(len(result)).upper())
+                        print(result)
+                        while True:
+                            res = input('select on of the results to show the information (-1 to cancel)'.upper())
+                            for fa, en in zip(self.FA_NUMS, self.EN_NUMS):
+                                res = res.replace(fa, en)
+                            if res == '-1':
+                                print('canceled'.upper())
+                                break
+                            else:
+                                try:
+                                    if int(res) in result:
+                                        print('DOC-ID : ' + str(self.doc_id[int(res) - 1]))
+                                        print('LINK   : ' + self.url[int(res) - 1])
+                                        print('CONTENT: \n' + self.content[int(res) - 1])
+
+                                    else:
+                                        print('bad input!'.upper())
+                                except Exception as e:
+                                    print(e)
+                                    print('bad input!'.upper())
+
+                except KeyError:
+                    print('no result'.upper())
+            print(45 * '- ')
 
 
 if __name__ == '__main__':
