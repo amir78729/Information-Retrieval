@@ -13,11 +13,14 @@ def strikedthrough(text):
 
 class SearchEngine:
     def __init__(self):
-        start = time.time()
-        path = 'IR_Spring2021_ph12_7k.xlsx'
-        # path = 'demo data.xlsx'
 
-        self.data = pd.read_excel(path)
+        start = time.time()
+        self.PATH = 'IR_Spring2021_ph12_7k.xlsx'
+        # self.PATH = 'demo data.xlsx'
+
+        self.MOKASSAAR_PLURALS = 'mokassar_plurals.txt'
+
+        self.data = pd.read_excel(self.PATH)
         self.doc_id = self.data['id'].tolist()
         self.content = self.data['content'].tolist()
         self.url = self.data['url'].tolist()
@@ -26,7 +29,13 @@ class SearchEngine:
         self.FA_NUMS = '۱ ۲ ۳ ۴ ۵ ۶ ۷ ۸ ۹ ٠ ۰'.split()
         self.EN_NUMS = '1 2 3 4 5 6 7 8 9 0 0'.split()
         self.SYMBOLS_TO_BE_REMOVED = '_ + = & ؟ ^ % $ . : ، \" \' | \\ / * ) ( ! - ؛'.split()
+        self.SUFFIXES_TO_BE_REMOVED = ['ترین', 'تر', 'ات', 'ها', 'ی', '‌شان', 'ان']
         self.STOPWORDS_LIMIT = 20
+        self.CHARACTERS_MODIFICATION = {
+            'آ': 'ا',
+            'ي': 'ی',
+            'ك': 'ک',
+        }
 
         # dictionaries
         self.stemming_conversion_dictionary = self.get_stemming_dictionary()
@@ -106,28 +115,26 @@ class SearchEngine:
             for l in tqdm(lines, 'VERBS\' STEMMING PROCESS '):
                 bon_maazi, bon_mozare = l.split()
                 for s in maazi_suffixes:
-                    dictionary.update({bon_maazi + s: bon_maazi})
-                    dictionary.update({'ن' + bon_maazi + s: bon_maazi})
-                    dictionary.update({'می‌' + bon_maazi + s: bon_maazi})
-                    dictionary.update({'می' + bon_maazi + s: bon_maazi})
-                    dictionary.update({'نمی‌' + bon_maazi + s: bon_maazi})
-                    dictionary.update({'نمی' + bon_maazi + s: bon_maazi})
-                    dictionary.update({bon_maazi + 'ه‌ا' + s: bon_maazi})
+                    dictionary.update({bon_maazi + s: bon_maazi})  # خواستم خواستی خواست ...
+                    dictionary.update({'ن' + bon_maazi + s: bon_maazi})  # نخواستم نخواستی نخواست ...
+                    dictionary.update({'می‌' + bon_maazi + s: bon_maazi})  # میخواستم میخواستی میخواست ...
+                    dictionary.update({'می' + bon_maazi + s: bon_maazi})  # می‌خواستم می‌خواستی می‌خواست ...
+                    dictionary.update({'نمی‌' + bon_maazi + s: bon_maazi})  # نمیخواستم نمیخواستی نمیخواست ...
+                    dictionary.update({'نمی' + bon_maazi + s: bon_maazi})  # نمی‌خواستم نمی‌خواستی نمی‌خواست ...
+                    dictionary.update({bon_maazi + 'ه‌ا' + s: bon_maazi})  # خواسته ام خواسته ای ...
                 for s in mozare_suffixes:
-                    dictionary.update({bon_mozare + s: bon_mozare})
-                    dictionary.update({'ب' + bon_mozare + s: bon_mozare})
-                    dictionary.update({'ن' + bon_mozare + s: bon_mozare})
-                    dictionary.update({'نمی‌' + bon_mozare + s: bon_mozare})
-                    dictionary.update({'نمی' + bon_mozare + s: bon_mozare})
-                    dictionary.update({'می‌' + bon_mozare + s: bon_mozare})
-                    dictionary.update({'می' + bon_mozare + s: bon_mozare})
+                    dictionary.update({bon_mozare + s: bon_mozare})  # خواهم خواهی خواهد ...
+                    dictionary.update({'ب' + bon_mozare + s: bon_mozare})  # بخواهم بخواهی بخواهد ...
+                    dictionary.update({'ن' + bon_mozare + s: bon_mozare})  # نخواهم نخواهی نخواهد ...
+                    dictionary.update({'نمی‌' + bon_mozare + s: bon_mozare})  # نمیخواهم نمیخواهی نمیخواهد ...
+                    dictionary.update({'نمی' + bon_mozare + s: bon_mozare})  # نمی‌خواهم نمی‌خواهی نمی‌خواهد ...
+                    dictionary.update({'می‌' + bon_mozare + s: bon_mozare})  # میخواهم میخواهی میخواهد ...
+                    dictionary.update({'می' + bon_mozare + s: bon_mozare})  # می‌خواهم می‌خواهی می‌خواهد ...
 
-                # dictionary.update({'ب' + bon_mozare: bon_mozare})
-                # dictionary.update({'ن' + bon_mozare: bon_mozare})
             return dictionary
 
     def get_mokassar_plurals_dictionary(self):
-        with open('mokassar_plurals.txt', 'r', encoding='utf-8') as stems:
+        with open(self.MOKASSAAR_PLURALS, 'r', encoding='utf-8') as stems:
             dictionary = dict()
             lines = stems.readlines()
             for l in tqdm(lines, 'GETTING MOKASSAR PLURALS'):
@@ -145,13 +152,10 @@ class SearchEngine:
         return list(dict.fromkeys(lst))
 
     def removing_suffixes(self, word):
-        suffixes = ['ترین', 'تر', 'ات', 'ها', 'ی', '‌شان', 'ان']
-        for s in suffixes:
+        for s in self.SUFFIXES_TO_BE_REMOVED:
             if word.endswith(s):
                 if word not in self.normalization_exceptions:
-                    # print(word)
                     word = self.remove_suffix(word, s)
-                    # print(word)
         return word
 
     def create_inverted_index(self, term_doc_id):
@@ -178,6 +182,11 @@ class SearchEngine:
         else:
             return term
 
+    def change_caracters(self, term):
+        for c in self.CHARACTERS_MODIFICATION.keys():
+            term = term.replace(c, self.CHARACTERS_MODIFICATION[c])
+        return term
+
     def normalize(self, term):
         # removing whitespaces
         term = term.strip()
@@ -189,7 +198,8 @@ class SearchEngine:
         for symbol in self.SYMBOLS_TO_BE_REMOVED:
             term = term.replace(symbol, '')
 
-        term = term.replace('آ', 'ا')
+        # change some characters:
+        term = self.change_caracters(term)
 
         # removing suffixes
         term = self.removing_suffixes(term)
@@ -277,17 +287,17 @@ class SearchEngine:
                     for query in string_without_substring:
                         try:
                             if query in self.stopwords:
-                                print('{} is a stopword'.format(query).upper())
+                                print('term {} :\tstopword'.format(query).upper())
                             else:
                                 result = sorted(list(set(self.inverted_index[self.normalize(query)])))
-                                print('{} result(s) founded for {}.'.format(len(result), query).upper())
+                                print('term {} :\t{} result(s)'.format(query.upper(), len(result)))
                                 result_docs = []
                                 for i in result:
                                     result_docs.append(i[0])
                                 set_of_answers.append(set(result_docs))
 
                         except KeyError:
-                            print('no result for'.upper(), query)
+                            print('term {} :\tno result for'.upper().format(query))
                             missing_words.append(query)
                 except IndexError:
                     pass
