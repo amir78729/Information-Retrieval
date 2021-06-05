@@ -4,6 +4,9 @@
     <list default="true" id="19a512a9-4594-42f7-a58a-48bd37193e62" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mokassar_plurals.txt" beforeDir="false" afterPath="$PROJECT_DIR$/mokassar_plurals.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/normalization_exceptions.txt" beforeDir="false" afterPath="$PROJECT_DIR$/normalization_exceptions.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stemming_conversion.txt" beforeDir="false" afterPath="$PROJECT_DIR$/stemming_conversion.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -16,10 +19,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="78">
-              <caret line="289" column="44" selection-start-line="289" selection-start-column="44" selection-end-line="289" selection-end-column="44" />
-              <caret line="292" column="44" selection-start-line="292" selection-start-column="44" selection-end-line="292" selection-end-column="44" />
-              <caret line="299" column="40" selection-start-line="299" selection-start-column="40" selection-end-line="299" selection-end-column="40" />
+            <state relative-caret-position="-1384">
+              <caret line="237" column="11" lean-forward="true" selection-start-line="237" selection-start-column="11" selection-end-line="237" selection-end-column="11" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -30,8 +31,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/normalization_exceptions.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="373">
-              <caret line="392" selection-start-line="392" selection-end-line="392" />
+            <state relative-caret-position="6630">
+              <caret line="390" column="5" selection-start-line="390" selection-start-column="5" selection-end-line="390" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -39,8 +40,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mokassar_plurals.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="884">
-              <caret line="52" column="10" selection-start-line="52" selection-start-column="10" selection-end-line="52" selection-end-column="10" />
+            <state relative-caret-position="935">
+              <caret line="55" selection-end-line="55" />
             </state>
           </provider>
         </entry>
@@ -48,8 +49,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/stemming_conversion.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="373">
-              <caret line="22" column="11" selection-start-line="22" selection-start-column="11" selection-end-line="22" selection-end-column="11" />
+            <state relative-caret-position="527">
+              <caret line="31" column="11" selection-end-line="31" selection-end-column="11" />
             </state>
           </provider>
         </entry>
@@ -65,12 +66,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>ها</find>
-      <find>tqdm</find>
-      <find>tqdm(</find>
-      <find>all_tokens_frequencies</find>
-      <find>یم</find>
-      <find>نمی</find>
       <find>نمی‌دانم</find>
       <find>نمی‌دان</find>
       <find>نمی‌دادیم</find>
@@ -95,11 +90,18 @@
       <find>input(</find>
       <find>1984</find>
       <find>ورزش بانوان</find>
+      <find>برای</find>
+      <find>پالایشگاه تهران</find>
+      <find>-۱</find>
+      <find>get_list_without_redundancy</find>
+      <find>bon_file</find>
+      <find>change_caracters</find>
     </findStrings>
     <replaceStrings>
       <replace>removing_suffixes(</replace>
       <replace>SYMBOLS_TO_BE_REMOVED</replace>
       <replace>self.ٍْ][ً]ٌيٍ</replace>
+      <replace>change_characters</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -108,9 +110,9 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/normalization_exceptions.txt" />
         <option value="$PROJECT_DIR$/stemming_conversion.txt" />
         <option value="$PROJECT_DIR$/mokassar_plurals.txt" />
+        <option value="$PROJECT_DIR$/normalization_exceptions.txt" />
         <option value="$PROJECT_DIR$/Main.py" />
       </list>
     </option>
@@ -205,12 +207,17 @@
       <workItem from="1621860158184" duration="37044000" />
       <workItem from="1622112926285" duration="10382000" />
       <workItem from="1622184035670" duration="3747000" />
-      <workItem from="1622391470949" duration="8712000" />
+      <workItem from="1622391470949" duration="8980000" />
+      <workItem from="1622445006169" duration="8644000" />
+      <workItem from="1622551125778" duration="2405000" />
+      <workItem from="1622740445008" duration="1038000" />
+      <workItem from="1622803166596" duration="27000" />
+      <workItem from="1622820634358" duration="6663000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="81269000" />
+    <option name="totallyTimeSpent" value="100314000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -223,13 +230,14 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1295" height="695" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13985449" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1519806" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.37411347" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.26950353" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -251,7 +259,7 @@
     <option name="version" value="1" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Information_Retrieval$Main.coverage" NAME="Main Coverage Results" MODIFIED="1622417833687" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Information_Retrieval$Main.coverage" NAME="Main Coverage Results" MODIFIED="1622825588275" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$USER_HOME$/AppData/Roaming/Python/Python37/site-packages/pandas/util/_decorators.py">
@@ -261,36 +269,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mokassar_plurals.txt">
+    <entry file="file://$PROJECT_DIR$/Main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="884">
-          <caret line="52" column="10" selection-start-line="52" selection-start-column="10" selection-end-line="52" selection-end-column="10" />
+        <state relative-caret-position="-1384">
+          <caret line="237" column="11" lean-forward="true" selection-start-line="237" selection-start-column="11" selection-end-line="237" selection-end-column="11" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/normalization_exceptions.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="373">
-          <caret line="392" selection-start-line="392" selection-end-line="392" />
+        <state relative-caret-position="6630">
+          <caret line="390" column="5" selection-start-line="390" selection-start-column="5" selection-end-line="390" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mokassar_plurals.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="935">
+          <caret line="55" selection-end-line="55" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/stemming_conversion.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="373">
-          <caret line="22" column="11" selection-start-line="22" selection-start-column="11" selection-end-line="22" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="78">
-          <caret line="289" column="44" selection-start-line="289" selection-start-column="44" selection-end-line="289" selection-end-column="44" />
-          <caret line="292" column="44" selection-start-line="292" selection-start-column="44" selection-end-line="292" selection-end-column="44" />
-          <caret line="299" column="40" selection-start-line="299" selection-start-column="40" selection-end-line="299" selection-end-column="40" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="527">
+          <caret line="31" column="11" selection-end-line="31" selection-end-column="11" />
         </state>
       </provider>
     </entry>
