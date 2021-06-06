@@ -11,6 +11,7 @@ class SearchEngine:
         # self.PATH = 'demo data.xlsx'
         self.MOKASSAAR_PLURALS = 'mokassar_plurals.txt'
         self.BON_FILE = 'stemming_conversion.txt'
+
         # constants
         self.FA_NUMS = '۱ ۲ ۳ ۴ ۵ ۶ ۷ ۸ ۹ ٠ ۰'.split()
         self.EN_NUMS = '1 2 3 4 5 6 7 8 9 0 0'.split()
@@ -22,43 +23,55 @@ class SearchEngine:
             'ي': 'ی',
             'ك': 'ک',
         }
+
+        # getting data from excel file
         self.data = pd.read_excel(self.PATH)
         self.doc_id = self.data['id'].tolist()
         self.content = self.data['content'].tolist()
         self.url = self.data['url'].tolist()
+
         # dictionaries
         self.stemming_conversion_dictionary = self.get_stemming_dictionary()
         self.mokassar_plurals_dictionary = self.get_mokassar_plurals_dictionary()
         self.all_tokens_frequencies = {}
         self.stopwords = []
+
         # reading exception words from file
         with open('normalization_exceptions.txt', 'r', encoding='utf-8') as file:
             self.normalization_exceptions = file.read().split('\n')
+
         # create term-DocID dictionary
         self.term_doc_id = []
-        # for i in tqdm(range(len(self.content)), "PROCESSING ALL DOCUMENTS"):
-        for i in tqdm(range(100), "PROCESSING ALL DOCUMENTS"):
+        # for i in tqdm(range(100), "PROCESSING ALL DOCUMENTS"):
+        for i in tqdm(range(len(self.content)), "PROCESSING ALL DOCUMENTS"):
+
             # make a list of words retrieved from content
             doc_terms = self.content[i].split()
+
             # process tokens
             position_index = 0
             for term in doc_terms:
                 term = self.normalize(term)
+
                 # add {TERM: (DocID, PositionalIndex}) to our dictionary
                 self.term_doc_id.append((term, (i+1, position_index)))
                 position_index += 1
+
                 # creating a list from distinct tokens
                 if term not in self.all_tokens_frequencies.keys():
                     self.all_tokens_frequencies.update({term: 1})
                 else:
                     self.all_tokens_frequencies.update({term: self.all_tokens_frequencies[term] + 1})
+
         # sort term-DocID dictionary by terms
         self.term_doc_id = self.sort_tuple(self.term_doc_id)
+
         # creating inverted indexes
         self.inverted_index = self.create_inverted_index()
         self.all_tokens_frequencies = dict(sorted(self.all_tokens_frequencies.items(), key=lambda x: x[1]))
         self.inverted_index.pop('')
         self.all_tokens_frequencies.pop('')
+
         # removing stopwords
         [self.stopwords.append(list(self.all_tokens_frequencies.keys())[-1 - sw])
          for sw in tqdm(range(self.STOPWORDS_LIMIT), desc='FINDING ALL OF STOPWORDS')]
@@ -109,7 +122,6 @@ class SearchEngine:
                     dictionary.update({'می‌' + bon_mozare + s: bon_mozare})  # میخواهم میخواهی میخواهد ...
                     dictionary.update({'می' + bon_mozare + s: bon_mozare})  # می‌خواهم می‌خواهی می‌خواهد ...
                     dictionary.update({bon_maazi + 'ه‌باش' + s: bon_maazi})  # خواسته‌باشم خواسته‌باشی ...
-
             return dictionary
 
     def get_mokassar_plurals_dictionary(self):
@@ -181,26 +193,34 @@ class SearchEngine:
         """
         # removing whitespaces
         term = term.strip()
+
         # case folding for english words
         term = term.lower()
+
         # change persian numbers into english numbers
         for fa, en in zip(self.FA_NUMS, self.EN_NUMS):
             term = term.replace(fa, en)
+
         # change some characters
         term = self.change_characters(term)
+
         # removing symbols
         for symbol in self.SYMBOLS_TO_BE_REMOVED:
             term = term.replace(symbol, '')
+
         # removing suffixes
         term = self.removing_suffixes(term)
+
         # changing verbs to stems ( بن مضارع / بن ماضی )
         term = self.stemming_processing(term)
+
         # change mokassar plurals into singular form
         term = self.mokassar_plurals_processing(term)
         return term
 
     def main(self):
         time.sleep(.6)
+
         print('SEARCH ENGINE IS READY ({} seconds)'.format(self.process_time))
         print(' ├─ {} DOCUMENTS '.format(len(self.content)))
         print(' ├─ {} TOKENS '.format(len(self.term_doc_id)))
@@ -213,6 +233,7 @@ class SearchEngine:
                 print(' │  └─ {}/{}:\t({}) \"{}\"'
                       .format(sw+1, len(self.stopwords), self.stopwords_count[sw], self.stopwords[sw]))
         print(' └─ {} DISTINCT VALUES WITHOUT STOPWORDS'.format(len(self.inverted_index)))
+
         while True:
             user_queries = input('enter a query \n'
                                  '(\"\\q\": quit the program)\n'
@@ -228,6 +249,7 @@ class SearchEngine:
                 set_of_answers = []
                 missing_words = []
                 substring_results = set()
+
                 # processing substring
                 if len(substring) != 0:
                     try:
