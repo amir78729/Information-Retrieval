@@ -7,8 +7,8 @@ import re
 class SearchEngine:
     def __init__(self):
         start = time.time()
-        self.PATH = 'IR_Spring2021_ph12_7k.xlsx'
-        # self.PATH = 'demo data.xlsx'
+        # self.PATH = 'IR_Spring2021_ph12_7k.xlsx'
+        self.PATH = 'demo data.xlsx'
         self.MOKASSAAR_PLURALS = 'mokassar_plurals.txt'
         self.BON_FILE = 'stemming_conversion.txt'
 
@@ -30,11 +30,12 @@ class SearchEngine:
         self.content = self.data['content'].tolist()
         self.url = self.data['url'].tolist()
 
-        # dictionaries
+        # dictionaries and lists
         self.stemming_conversion_dictionary = self.get_stemming_dictionary()
         self.mokassar_plurals_dictionary = self.get_mokassar_plurals_dictionary()
         self.all_tokens_frequencies = {}
         self.stopwords = []
+        self.tf = dict()
 
         # reading exception words from file
         with open('normalization_exceptions.txt', 'r', encoding='utf-8') as file:
@@ -44,6 +45,9 @@ class SearchEngine:
         self.term_doc_id = []
         # for i in tqdm(range(100), "PROCESSING ALL DOCUMENTS"):
         for i in tqdm(range(len(self.content)), "PROCESSING ALL DOCUMENTS"):
+
+            # used for calculating term frequency
+            tf_temp = dict()
 
             # make a list of words retrieved from content
             doc_terms = self.content[i].split()
@@ -63,6 +67,18 @@ class SearchEngine:
                 else:
                     self.all_tokens_frequencies.update({term: self.all_tokens_frequencies[term] + 1})
 
+                # creating a list from distinct tokens for term frequency
+                if term not in tf_temp.keys():
+                    tf_temp.update({term: 1})
+                else:
+                    tf_temp.update({term: tf_temp[term] + 1})
+
+            self.tf.update({i+1: tf_temp})
+
+        for i  in  self.tf.keys():
+            for j in self.tf[i].keys():
+                print('{}\t{}: {}'.format(i, j, self.tf[i][j]))
+            print()
         # sort term-DocID dictionary by terms
         self.term_doc_id = self.sort_tuple(self.term_doc_id)
 
