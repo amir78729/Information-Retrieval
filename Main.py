@@ -2,6 +2,7 @@ import pandas as pd
 from tqdm import tqdm
 import time
 import re
+import math
 
 
 class SearchEngine:
@@ -35,7 +36,13 @@ class SearchEngine:
         self.mokassar_plurals_dictionary = self.get_mokassar_plurals_dictionary()
         self.all_tokens_frequencies = {}
         self.stopwords = []
-        self.tf = dict()
+        self.term_frequency = dict()  # access: self.term_frequency[DOC_ID][TERM]
+        self.document_frequency = dict()  # access: self.document_frequency[TERM]
+
+        # tf-idf
+        # self.calc_tf = lambda doc, term: self.term_frequency[doc][term]
+        # self.calc_df = lambda term: len(self.document_frequency[term])
+        # self.tfidf = lambda tf, df: (1 + math.log(tf)) * math.log((len(self.doc_id) / df), 10)
 
         # reading exception words from file
         with open('normalization_exceptions.txt', 'r', encoding='utf-8') as file:
@@ -58,7 +65,7 @@ class SearchEngine:
                 term = self.normalize(term)
 
                 # add {TERM: (DocID, PositionalIndex}) to our dictionary
-                self.term_doc_id.append((term, (i+1, position_index)))
+                self.term_doc_id.append((term, (i + 1, position_index)))
                 position_index += 1
 
                 # creating a list from distinct tokens
@@ -73,12 +80,18 @@ class SearchEngine:
                 else:
                     tf_temp.update({term: tf_temp[term] + 1})
 
-            self.tf.update({i+1: tf_temp})
+                # creating a list from distinct tokens for documnet frequency
+                if term not in self.document_frequency.keys():
+                    l = [i]
+                    self.document_frequency.update({term: l})
+                else:
+                    if i not in self.document_frequency[term]:
+                        l = self.document_frequency[term]
+                        l.append(i)
+                        self.document_frequency.update({term: l})
 
-        for i  in  self.tf.keys():
-            for j in self.tf[i].keys():
-                print('{}\t{}: {}'.format(i, j, self.tf[i][j]))
-            print()
+            self.term_frequency.update({i + 1: tf_temp})
+
         # sort term-DocID dictionary by terms
         self.term_doc_id = self.sort_tuple(self.term_doc_id)
 
@@ -97,6 +110,31 @@ class SearchEngine:
         [self.inverted_index.pop(sw) for sw in tqdm(self.stopwords, desc='REMOVING SOME STOPWORDS ')]
         end = time.time()
         self.process_time = end - start
+        print(self.inverted_index)
+
+        t = 'است'
+        for i in self.doc_id:
+            print("doc", i)
+            print(self.tfidf(t, i))
+
+    def print_tf(self):
+        for i in self.term_frequency.keys():
+            for j in self.term_frequency[i].keys():
+                print('{}\t{}: {}'.format(i, j, self.term_frequency[i][j]))
+            print()
+
+    def tfidf(self, t, d):
+        # self.calc_tf = lambda doc, term: self.term_frequency[doc][term]
+        # self.calc_df = lambda term: len(self.document_frequency[term])
+        # self.tfidf = lambda tf, df: (1 + math.log(tf)) * math.log((len(self.doc_id) / df), 10)
+        try:
+            tf = 1 + math.log(self.term_frequency[d][t])
+        except KeyError:
+            tf = 0
+
+        idf = math.log((len(self.doc_id) / len(self.document_frequency[t])), 10)
+
+        return tf * idf
 
     # Function to sort the list by second item of tuple
     def sort_tuple(self, tup):
@@ -242,12 +280,12 @@ class SearchEngine:
         print(' ├─ {} TOKENS '.format(len(self.term_doc_id)))
         print(' ├─ {} STOPWORDS'.format(len(self.stopwords)))
         for sw in range(len(self.stopwords)):
-            if sw != len(self.stopwords)-1:
+            if sw != len(self.stopwords) - 1:
                 print(' │  ├─ {}/{}:\t({}) \"{}\"'
-                      .format(sw+1, len(self.stopwords), self.stopwords_count[sw], self.stopwords[sw]))
+                      .format(sw + 1, len(self.stopwords), self.stopwords_count[sw], self.stopwords[sw]))
             else:
                 print(' │  └─ {}/{}:\t({}) \"{}\"'
-                      .format(sw+1, len(self.stopwords), self.stopwords_count[sw], self.stopwords[sw]))
+                      .format(sw + 1, len(self.stopwords), self.stopwords_count[sw], self.stopwords[sw]))
         print(' └─ {} DISTINCT VALUES WITHOUT STOPWORDS'.format(len(self.inverted_index)))
 
         while True:
@@ -291,8 +329,8 @@ class SearchEngine:
                                     flag = True
                                     doc = base[0]
                                     index = base[1]
-                                    for i in range(len(candidates)-1):
-                                        if (doc, index + i + 1) not in candidates[i+1]:
+                                    for i in range(len(candidates) - 1):
+                                        if (doc, index + i + 1) not in candidates[i + 1]:
                                             flag = False
                                             break
                                     if flag:
@@ -341,7 +379,7 @@ class SearchEngine:
             if len(missing_words) != 0:
                 print('( missing words: '.upper(), end='')
                 for i in range(len(missing_words)):
-                    if i == len(missing_words)-1:
+                    if i == len(missing_words) - 1:
                         print(missing_words[i], ')')
                     else:
                         print(missing_words[i], end=', ')
