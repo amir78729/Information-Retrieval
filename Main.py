@@ -3,6 +3,7 @@ from tqdm import tqdm
 import time
 import re
 import math
+import numpy as np
 
 
 class SearchEngine:
@@ -39,11 +40,6 @@ class SearchEngine:
         self.term_frequency = dict()  # access: self.term_frequency[DOC_ID][TERM]
         self.document_frequency = dict()  # access: self.document_frequency[TERM]
 
-        # tf-idf
-        # self.calc_tf = lambda doc, term: self.term_frequency[doc][term]
-        # self.calc_df = lambda term: len(self.document_frequency[term])
-        # self.tfidf = lambda tf, df: (1 + math.log(tf)) * math.log((len(self.doc_id) / df), 10)
-
         # reading exception words from file
         with open('normalization_exceptions.txt', 'r', encoding='utf-8') as file:
             self.normalization_exceptions = file.read().split('\n')
@@ -63,10 +59,6 @@ class SearchEngine:
             position_index = 0
             for term in doc_terms:
                 term = self.normalize(term)
-
-                # add {TERM: (DocID, PositionalIndex}) to our dictionary
-                self.term_doc_id.append((term, (i + 1, position_index)))
-                position_index += 1
 
                 # creating a list from distinct tokens
                 if term not in self.all_tokens_frequencies.keys():
@@ -90,6 +82,10 @@ class SearchEngine:
                         l.append(i)
                         self.document_frequency.update({term: l})
 
+                # add {TERM: (DocID, PositionalIndex}) to our dictionary
+                self.term_doc_id.append((term, (i + 1, position_index)))
+                position_index += 1
+
             self.term_frequency.update({i + 1: tf_temp})
 
         # sort term-DocID dictionary by terms
@@ -101,6 +97,23 @@ class SearchEngine:
         self.inverted_index.pop('')
         self.all_tokens_frequencies.pop('')
 
+        # calculating vector space
+        # self.vector_space = np.zeros((2, 3))
+        # print(self.vector_space)
+
+        self.vector_space = [
+            [
+                self.tf_idf(T, D) for D in self.doc_id
+            ]
+            for T in tqdm(self.all_tokens_frequencies.keys(), 'CREATING DOC. VEC. SPACE')
+        ]
+
+        # print(np.array(self.vector_space).shape)
+        for i in self.vector_space:
+            print(i)
+            print('*'*20)
+
+
         # removing stopwords
         [self.stopwords.append(list(self.all_tokens_frequencies.keys())[-1 - sw])
          for sw in tqdm(range(self.STOPWORDS_LIMIT), desc='FINDING ALL OF STOPWORDS')]
@@ -110,12 +123,13 @@ class SearchEngine:
         [self.inverted_index.pop(sw) for sw in tqdm(self.stopwords, desc='REMOVING SOME STOPWORDS ')]
         end = time.time()
         self.process_time = end - start
-        print(self.inverted_index)
 
-        t = 'است'
-        for i in self.doc_id:
-            print("doc", i)
-            print(self.tfidf(t, i))
+        # t = 'دریافت'
+        # for i in self.doc_id:
+        #     print("doc", i)
+        #     print(self.tf_idf(t, i))
+        #
+        # print(self.inverted_index['دریافت'])
 
     def print_tf(self):
         for i in self.term_frequency.keys():
@@ -123,16 +137,15 @@ class SearchEngine:
                 print('{}\t{}: {}'.format(i, j, self.term_frequency[i][j]))
             print()
 
-    def tfidf(self, t, d):
-        # self.calc_tf = lambda doc, term: self.term_frequency[doc][term]
-        # self.calc_df = lambda term: len(self.document_frequency[term])
-        # self.tfidf = lambda tf, df: (1 + math.log(tf)) * math.log((len(self.doc_id) / df), 10)
+    def tf_idf(self, t, d):
         try:
             tf = 1 + math.log(self.term_frequency[d][t])
         except KeyError:
             tf = 0
-
-        idf = math.log((len(self.doc_id) / len(self.document_frequency[t])), 10)
+        try:
+            idf = math.log((len(self.doc_id) / len(self.document_frequency[t])), 10)
+        except KeyError:
+            idf = 0
 
         return tf * idf
 
