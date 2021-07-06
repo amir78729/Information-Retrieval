@@ -101,17 +101,17 @@ class SearchEngine:
         # self.vector_space = np.zeros((2, 3))
         # print(self.vector_space)
 
-        self.vector_space = [
+        self.vector_space = np.array([
             [
                 self.tf_idf(T, D) for D in self.doc_id
             ]
             for T in tqdm(self.all_tokens_frequencies.keys(), 'CREATING DOC. VEC. SPACE')
-        ]
+        ]).transpose()
 
         # print(np.array(self.vector_space).shape)
-        for i in self.vector_space:
-            print(i)
-            print('*'*20)
+        # for i in self.vector_space:
+        #     print(i)
+        #     print('*'*20)
 
 
         # removing stopwords
@@ -128,8 +128,12 @@ class SearchEngine:
         # for i in self.doc_id:
         #     print("doc", i)
         #     print(self.tf_idf(t, i))
-        #
-        # print(self.inverted_index['دریافت'])
+
+        # print(self.inverted_index[t])
+        # print(self.document_frequency)
+        print(self.vector_space.shape)
+        q = self.query_vector_space('دریافت یارانه نقدی علی')
+        print(q)
 
     def print_tf(self):
         for i in self.term_frequency.keys():
@@ -140,14 +144,28 @@ class SearchEngine:
     def tf_idf(self, t, d):
         try:
             tf = 1 + math.log(self.term_frequency[d][t])
-        except KeyError:
+        except (KeyError, ValueError):
             tf = 0
         try:
             idf = math.log((len(self.doc_id) / len(self.document_frequency[t])), 10)
         except KeyError:
             idf = 0
-
         return tf * idf
+
+    def query_vector_space(self, query):
+        vector = []
+        for T in self.all_tokens_frequencies.keys():
+            # print(T)
+            try:
+                tf = 1 + math.log(query.count(T))
+            except (KeyError, ValueError):
+                tf = 0
+            try:
+                idf = math.log((len(self.doc_id) / len(self.document_frequency[T])), 10)
+            except KeyError:
+                idf = 0
+            vector.append(tf * idf)
+        return np.array(vector)
 
     # Function to sort the list by second item of tuple
     def sort_tuple(self, tup):
@@ -355,6 +373,7 @@ class SearchEngine:
                             msg += s + " "
                         print('SUBSTRING \"{}\" NOT FOUND.'.format(msg))
                 try:
+                    print(string_without_substring)
                     for query in string_without_substring:
                         try:
                             if query in self.stopwords:
