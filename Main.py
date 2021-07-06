@@ -131,9 +131,9 @@ class SearchEngine:
 
         # print(self.inverted_index[t])
         # print(self.document_frequency)
-        print(self.vector_space.shape)
-        q = self.query_vector_space('دریافت یارانه نقدی علی')
-        print(q)
+        # print(self.vector_space.shape)
+        # q = self.query_vector_space('دریافت یارانه نقدی علی')
+        # print(q)
 
     def print_tf(self):
         for i in self.term_frequency.keys():
@@ -154,8 +154,7 @@ class SearchEngine:
 
     def query_vector_space(self, query):
         vector = []
-        for T in self.all_tokens_frequencies.keys():
-            # print(T)
+        for T in tqdm(self.all_tokens_frequencies.keys(), 'CREATING QUERY VEC.SPACE'):
             try:
                 tf = 1 + math.log(query.count(T))
             except (KeyError, ValueError):
@@ -166,6 +165,20 @@ class SearchEngine:
                 idf = 0
             vector.append(tf * idf)
         return np.array(vector)
+
+    # cosine similarity method
+    def cosine_similarity(self, a, b):
+        return np.dot(a, b)/(np.linalg.norm(a)*np.linalg.norm(b))
+
+    def query_similarity(self, user_query_vector_space):
+        i = 1
+        lst = []
+        for doc in tqdm(self.vector_space, 'CALCULATING SIMILARITY'):
+            similarity = self.cosine_similarity(doc, user_query_vector_space)
+            if similarity != 0.0 and not math.isnan(similarity):
+                lst.append((i, similarity))
+            i += 1
+        return sorted(lst, key=lambda x: x[1])[::-1]
 
     # Function to sort the list by second item of tuple
     def sort_tuple(self, tup):
@@ -324,6 +337,10 @@ class SearchEngine:
                                  '(\"\\q\": quit the program)\n'
                                  '(you can use \"[a substring]\" in search)\n> '.upper())
             substring, string_without_substring = self.exstract_substring(user_queries)
+            user_query_vector_space = self.query_vector_space(user_queries)
+
+            print(self.query_similarity(user_query_vector_space))
+
             start_time = time.time()
             if user_queries == '':
                 print("EMPTY QUERY!")
