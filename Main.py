@@ -9,8 +9,8 @@ import numpy as np
 class SearchEngine:
     def __init__(self):
         start = time.time()
-        # self.PATH = 'IR_Spring2021_ph12_7k.xlsx'
-        self.PATH = 'demo data.xlsx'
+        self.PATH = 'IR_Spring2021_ph12_7k.xlsx'
+        # self.PATH = 'demo data.xlsx'
         self.MOKASSAAR_PLURALS = 'mokassar_plurals.txt'
         self.BON_FILE = 'stemming_conversion.txt'
 
@@ -68,19 +68,26 @@ class SearchEngine:
 
                 # creating a list from distinct tokens for term frequency
                 if term not in tf_temp.keys():
+                    # first time we see a word in this doc
                     tf_temp.update({term: 1})
+
+                    # updating df
+                    if term not in self.document_frequency.keys():
+                        self.document_frequency.update({term: 1})
+                    else:
+                        self.document_frequency.update({term: self.document_frequency[term] + 1})
                 else:
                     tf_temp.update({term: tf_temp[term] + 1})
 
-                # creating a list from distinct tokens for documnet frequency
-                if term not in self.document_frequency.keys():
-                    l = [i]
-                    self.document_frequency.update({term: l})
-                else:
-                    if i not in self.document_frequency[term]:
-                        l = self.document_frequency[term]
-                        l.append(i)
-                        self.document_frequency.update({term: l})
+                # # creating a list from distinct tokens for documnet frequency
+                # if term not in self.document_frequency.keys():
+                #     l = [i]
+                #     self.document_frequency.update({term: l})
+                # else:
+                #     if i not in self.document_frequency[term]:
+                #         l = self.document_frequency[term]
+                #         l.append(i)
+                #         self.document_frequency.update({term: l})
 
                 # add {TERM: (DocID, PositionalIndex}) to our dictionary
                 self.term_doc_id.append((term, (i + 1, position_index)))
@@ -147,7 +154,7 @@ class SearchEngine:
         except (KeyError, ValueError):
             tf = 0
         try:
-            idf = math.log((len(self.doc_id) / len(self.document_frequency[t])), 10)
+            idf = math.log((len(self.doc_id) / self.document_frequency[t]), 10)
         except KeyError:
             idf = 0
         return tf * idf
