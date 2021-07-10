@@ -220,7 +220,8 @@ class SearchEngine:
             if similarity != 0.0 and not math.isnan(similarity):
                 lst.append((i, similarity))
             i += 1
-        return sorted(lst, key=lambda x: x[1])[::-1]
+        # return sorted(lst, key=lambda x: x[1])[::-1]
+        return lst
 
     # Function to sort the list by second item of tuple
     def sort_tuple(self, tup):
