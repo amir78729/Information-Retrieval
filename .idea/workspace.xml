@@ -2,11 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="19a512a9-4594-42f7-a58a-48bd37193e62" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Heap.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/IR_Spring2021.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/IR_Spring2021.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Heap.py" beforeDir="false" afterPath="$PROJECT_DIR$/Heap.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/normalization_exceptions.txt" beforeDir="false" afterPath="$PROJECT_DIR$/normalization_exceptions.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -19,8 +17,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-679">
-              <caret line="104" column="8" selection-start-line="104" selection-start-column="8" selection-end-line="104" selection-end-column="8" />
+            <state relative-caret-position="77">
+              <caret line="343" column="8" selection-start-line="343" selection-start-column="8" selection-end-line="343" selection-end-column="8" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -31,8 +29,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Heap.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
-              <caret line="102" lean-forward="true" selection-start-line="102" selection-end-line="102" />
+            <state relative-caret-position="38">
+              <caret line="161" lean-forward="true" selection-start-line="124" selection-end-line="161" />
             </state>
           </provider>
         </entry>
@@ -48,18 +46,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>2010</find>
-      <find>۲۰۱۰</find>
-      <find>میداند</find>
-      <find>دان</find>
-      <find>بد</find>
-      <find>self.stopwords</find>
-      <find>self.term_doc_id</find>
-      <find>input(</find>
-      <find>1984</find>
-      <find>ورزش بانوان</find>
-      <find>برای</find>
-      <find>پالایشگاه تهران</find>
       <find>-۱</find>
       <find>get_list_without_redundancy</find>
       <find>change_caracters</find>
@@ -78,6 +64,18 @@
       <find>تلاشها</find>
       <find>u200cگیر</find>
       <find>امادگ</find>
+      <find>isLeaf</find>
+      <find>FRONT</find>
+      <find>Heap</find>
+      <find>maxheapify</find>
+      <find>extractMax</find>
+      <find>Maxheap</find>
+      <find>'-'</find>
+      <find>[1]</find>
+      <find>heap.</find>
+      <find>heapSort</find>
+      <find>TOP_RANK_NUMBERS</find>
+      <find>query_similarity</find>
     </findStrings>
     <replaceStrings>
       <replace>removing_suffixes(</replace>
@@ -86,6 +84,12 @@
       <replace>change_characters</replace>
       <replace>self.term_frequency</replace>
       <replace>self.document_frequency</replace>
+      <replace>is_leaf</replace>
+      <replace>front</replace>
+      <replace>heap</replace>
+      <replace>max_heapify</replace>
+      <replace>extract_max</replace>
+      <replace>MaxHeap</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -96,8 +100,8 @@
       <list>
         <option value="$PROJECT_DIR$/mokassar_plurals.txt" />
         <option value="$PROJECT_DIR$/stemming_conversion.txt" />
-        <option value="$PROJECT_DIR$/Heap.py" />
         <option value="$PROJECT_DIR$/normalization_exceptions.txt" />
+        <option value="$PROJECT_DIR$/Heap.py" />
         <option value="$PROJECT_DIR$/Main.py" />
       </list>
     </option>
@@ -130,7 +134,7 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="F:/University/Computer Networks/Projects/Computer-Networks-DHCP-Project" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
   </component>
@@ -146,7 +150,29 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.Heap">
+    <configuration name="Heap" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Information-Retrieval" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Heap.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="Main" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Information-Retrieval" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -172,6 +198,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.Main" />
+        <item itemvalue="Python.Heap" />
       </list>
     </recent_temporary>
   </component>
@@ -204,7 +231,8 @@
       <workItem from="1625081974262" duration="1212000" />
       <workItem from="1625405305544" duration="24680000" />
       <workItem from="1625830884401" duration="12768000" />
-      <workItem from="1625944194217" duration="1552000" />
+      <workItem from="1625944194217" duration="7160000" />
+      <workItem from="1626095520391" duration="5025000" />
     </task>
     <task id="LOCAL-00001" summary="starting phase 2">
       <created>1625405488690</created>
@@ -248,11 +276,32 @@
       <option name="project" value="LOCAL" />
       <updated>1625832733075</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="remove '' from df">
+      <created>1625945932126</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1625945932126</updated>
+    </task>
+    <task id="LOCAL-00008" summary="heap class created">
+      <created>1625948170781</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1625948170781</updated>
+    </task>
+    <task id="LOCAL-00009" summary="heap class moved to Main.py">
+      <created>1625948219606</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1625948219606</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="142804000" />
+    <option name="totallyTimeSpent" value="153437000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -265,14 +314,13 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1295" height="695" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16895716" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17138238" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.20212767" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.44858155" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39893618" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -300,10 +348,14 @@
     <MESSAGE value="query vector space created" />
     <MESSAGE value="sort docs via similarity (still not showing to user)" />
     <MESSAGE value="calculating df in tf:}" />
-    <option name="LAST_COMMIT_MESSAGE" value="calculating df in tf:}" />
+    <MESSAGE value="remove '' from df" />
+    <MESSAGE value="heap class created" />
+    <MESSAGE value="heap class moved to Main.py" />
+    <option name="LAST_COMMIT_MESSAGE" value="heap class moved to Main.py" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Information_Retrieval$Main.coverage" NAME="Main Coverage Results" MODIFIED="1625945878542" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Information_Retrieval$Main.coverage" NAME="Main Coverage Results" MODIFIED="1626101872240" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Information_Retrieval$Heap.coverage" NAME="Heap Coverage Results" MODIFIED="1626101866783" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$USER_HOME$/AppData/Roaming/Python/Python37/site-packages/pandas/util/_decorators.py">
@@ -343,15 +395,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Heap.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="102" lean-forward="true" selection-start-line="102" selection-end-line="102" />
+        <state relative-caret-position="38">
+          <caret line="161" lean-forward="true" selection-start-line="124" selection-end-line="161" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-679">
-          <caret line="104" column="8" selection-start-line="104" selection-start-column="8" selection-end-line="104" selection-end-column="8" />
+        <state relative-caret-position="77">
+          <caret line="343" column="8" selection-start-line="343" selection-start-column="8" selection-end-line="343" selection-end-column="8" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>
