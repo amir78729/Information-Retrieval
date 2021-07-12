@@ -4,7 +4,6 @@ import time
 import re
 import math
 import numpy as np
-import sys
 
 def heapify(arr, n, i):
     largest = i  # Initialize largest as root
@@ -45,106 +44,11 @@ def heapSort(arr, k):
     return res[:k]
 
 
-# class MaxHeap:
-#     def __init__(self, maxsize):
-#         self.maxsize = maxsize
-#         self.size = 0
-#         self.heap = [(0, 0)] * (self.maxsize + 1)
-#         self.heap[0] = (-1, sys.maxsize)
-#         self.front = 1
-#
-#     # Function to return the position of parent for the node currently at pos
-#     def parent(self, pos):
-#         return pos // 2
-#
-#     # Function to return the position of the left child for the node currently  at pos
-#     def leftChild(self, pos):
-#         return 2 * pos
-#
-#     # Function to return the position of the right child for the node currently at pos
-#     def rightChild(self, pos):
-#
-#         return (2 * pos) + 1
-#
-#     # Function that returns true if the passed node is a leaf node
-#     def is_leaf(self, pos):
-#         return (self.size // 2) <= pos <= self.size
-#
-#     # Function to swap two nodes of the heap
-#     def swap(self, fpos, spos):
-#         self.heap[fpos], self.heap[spos] = (self.heap[spos],self.heap[fpos])
-#
-#     # Function to heapify the node at pos
-#     def max_heapify(self, pos):
-#         # If the node is a non-leaf node and smaller
-#         # than any of its child
-#         if not self.is_leaf(pos):
-#             if (self.heap[pos] < self.heap[self.leftChild(pos)] or
-#                     self.heap[pos] < self.heap[self.rightChild(pos)]):
-#
-#                 # Swap with the left child and heapify
-#                 # the left child
-#                 if (self.heap[self.leftChild(pos)] >
-#                         self.heap[self.rightChild(pos)]):
-#                     self.swap(pos, self.leftChild(pos))
-#                     self.max_heapify(self.leftChild(pos))
-#
-#                 # Swap with the right child and heapify
-#                 # the right child
-#                 else:
-#                     self.swap(pos, self.rightChild(pos))
-#                     self.max_heapify(self.rightChild(pos))
-#
-#     # Function to insert a node into the heap
-#     def insert(self, element):
-#         if self.size >= self.maxsize:
-#             return
-#         self.size += 1
-#         self.heap[self.size] = element
-#
-#         current = self.size
-#
-#         # print(self.heap[current])
-#         # print(self.heap[self.parent(current)])
-#         while self.heap[current] > self.heap[self.parent(current)]:
-#
-#             self.swap(current, self.parent(current))
-#             current = self.parent(current)
-#
-#     # Function to print the contents of the heap
-#     def print_heap(self):
-#         try:
-#             self.heap.remove((-1, sys.maxsize))
-#         except ValueError:
-#             pass
-#         for i in range(1, (self.size // 2) + 1):
-#             try:
-#                 print(" PARENT : " + str(self.heap[i]))
-#             except:
-#                 pass
-#             try:
-#                 print("\t LEFT CHILD : " + str(self.heap[2 * i]))
-#             except:
-#                 pass
-#             try:
-#                 print("\t RIGHT CHILD : " + str(self.heap[2 * i + 1]))
-#             except:
-#                 pass
-#
-#     # Function to remove and return the maximum element from the heap
-#     def extract_max(self):
-#         popped = self.heap[self.front]
-#         self.heap[self.front] = self.heap[self.size]
-#         self.size -= 1
-#         self.max_heapify(self.front)
-#         return popped
-
-
 class SearchEngine:
     def __init__(self):
         start = time.time()
-        # self.PATH = 'IR_Spring2021_ph12_7k.xlsx'
-        self.PATH = 'demo data.xlsx'
+        self.PATH = 'IR_Spring2021_ph12_7k.xlsx'
+        # self.PATH = 'demo data.xlsx'
         self.MOKASSAAR_PLURALS = 'mokassar_plurals.txt'
         self.BON_FILE = 'stemming_conversion.txt'
 
@@ -155,7 +59,7 @@ class SearchEngine:
         self.SUFFIXES_TO_BE_REMOVED = ['ترین', 'تر', 'ات', 'ها', 'ی', '‌شان', 'ان']
         self.STOPWORDS_LIMIT = 20
         self.TOP_RANK_NUMBERS = 20
-        self.CHAMPIONS_LISTS_LIMIT = 6
+        self.CHAMPIONS_LISTS_LIMIT = 100
         self.CHARACTERS_MODIFICATION = {
             'آ': 'ا',
             'ي': 'ی',
@@ -264,15 +168,24 @@ class SearchEngine:
 
         # print(self.vector_space)
 
-        # # creating champion lists
-        # for t in tqdm(self.all_tokens_frequencies.keys(), 'CREATING CHAMPION LISTS '):
-        #     all_ranks = []
-        #     for d in self.doc_id:
-        #         tfidt = self.tf_idf(t, d)
-        #         all_ranks.append((d, tfidt))
-        #     ch_lists = heapSort(all_ranks, self.CHAMPIONS_LISTS_LIMIT)
-        #     # print(ch_lists)
-        #     self.champion_lists.update({t: ch_lists})
+        # creating champion lists
+        for t in tqdm(self.all_tokens_frequencies.keys(), 'CREATING CHAMPION LISTS '):
+            all_ranks = []
+            for d in self.doc_id:
+                try:
+                    score = self.term_frequency[d][t]
+                    all_ranks.append((d, score))
+                except KeyError:
+                    pass
+            ch_lists = heapSort(all_ranks, self.CHAMPIONS_LISTS_LIMIT)
+            # print(ch_lists)
+            self.champion_lists.update({t: ch_lists})
+
+        # for i in self.doc_id:
+        #     try:
+        #         print((i, self.term_frequency[i]['المپیک']))
+        #     except:
+        #         pass
 
         # print(self.champion_lists)
 
@@ -675,7 +588,9 @@ class SearchEngine:
             print(45 * '- ')
 
     def main2(self):
+
         time.sleep(.6)
+        print(self.champion_lists)
         print('SEARCH ENGINE IS READY ({} seconds)'.format(self.process_time))
         print(' ├─ {} DOCUMENTS '.format(len(self.content)))
         print(' ├─ {} TOKENS '.format(len(self.term_doc_id)))
@@ -708,7 +623,40 @@ class SearchEngine:
                 using_champion_list = True
 
             if using_champion_list:
-                pass
+
+                candidates = []
+                for s in user_queries_terms:
+                    try:
+                        candidate = self.champion_lists[s]
+                        candidates.append(candidate)
+                    except KeyError:
+                        pass
+                docs = []
+                for c in candidates:
+                    cc = []
+                    for ccc in c:
+                        cc.append(ccc[0])
+                    docs.append(set(cc))
+                top_k_result = list(set.union(*docs))
+                print("TOP RESULTS:".format(self.TOP_RANK_NUMBERS))
+                [print(' └─ {} '.format(i)) for i in top_k_result]
+                while True:
+                    res = input('select on of the results to show the information (-1 to cancel)\n> '.upper())
+                    for fa, en in zip(self.FA_NUMS, self.EN_NUMS):
+                        res = res.replace(fa, en)
+                    if res == '-1':
+                        print('canceled'.upper())
+                        break
+                    else:
+                        try:
+                            print('DOC-ID : ' + str(self.doc_id[int(res) - 1]))
+                            print('LINK   : ' + self.url[int(res) - 1])
+                            print('CONTENT: \n' + self.content[int(res) - 1])
+
+                        except Exception as e:
+                            print(e)
+                            print('bad input!'.upper())
+                print(45 * '- ')
             else:
                 query_vector = self.query_vector_space(user_queries, True)
                 top_k_result = self.query_similarity(query_vector, True)
