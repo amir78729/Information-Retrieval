@@ -174,6 +174,7 @@ class SearchEngine:
         self.stopwords = []
         self.term_frequency = dict()  # access: self.term_frequency[DOC_ID][TERM]
         self.document_frequency = dict()  # access: self.document_frequency[TERM]
+        self.champion_lists = dict()
 
         # reading exception words from file
         with open('normalization_exceptions.txt', 'r', encoding='utf-8') as file:
@@ -253,13 +254,20 @@ class SearchEngine:
         #     for D in tqdm(self.doc_id, 'CREATING DOC. VEC. SPACE')
         # ]).transpose()
 
+        # creating a vector space for docs
         self.vector_space = dict()
-
         for D in tqdm(self.doc_id, 'CREATING DOC. VEC. SPACE'):
-            vector = self.vectorize_a_doc(self.term_frequency[D])
+            vector = self.vectoring_a_doc(self.term_frequency[D])
             # print(D)
             self.vector_space[D] = vector
 
+        # creating champion lists
+        for t in tqdm(self.all_tokens_frequencies.keys(), 'CREATING CHAMPION LISTS '):
+            vec = self.query_vector_space(t, False)
+            self.champion_lists.update({t: self.query_similarity(vec, False)})
+
+        # for i in self.champion_lists.keys():
+        #     print(i, ':', self.champion_lists[i])
 
         # print(np.array(self.vector_space).shape)
         # for i in self.vector_space:
@@ -273,6 +281,8 @@ class SearchEngine:
         [self.stopwords_count.append(self.all_tokens_frequencies[sw])
          for sw in self.stopwords]
         [self.inverted_index.pop(sw) for sw in tqdm(self.stopwords, desc='REMOVING SOME STOPWORDS ')]
+
+        # stopping the timer
         end = time.time()
         self.process_time = end - start
 
@@ -287,31 +297,30 @@ class SearchEngine:
         # q = self.query_vector_space('دریافت یارانه نقدی علی')
         # print(q)
 
+    # a method for testing tf
     def print_tf(self):
         for i in self.term_frequency.keys():
             for j in self.term_frequency[i].keys():
                 print('{}\t{}: {}'.format(i, j, self.term_frequency[i][j]))
             print()
 
-    def vectorize_a_doc(self, tf):
+    # bringing a doc to vector space
+    def vectoring_a_doc(self, tf):
         N = len(self.document_frequency)
-        # print(N)
-        v = np.zeros(N)
-        counter = 0
-        w = 0
+        vector = np.zeros(N)
+        counter, w = 0, 0
         for term in self.document_frequency.keys():
             counter += 1
             if term in tf:
                 tf_id = (1 + math.log(tf[term])) * (math.log(N / self.document_frequency[term]))
             else:
                 tf_id = 0
-            v[counter - 1] = tf_id
+            vector[counter - 1] = tf_id
             w += tf_id ** 2
+        vector /= math.sqrt(w)
+        return vector
 
-        v /= math.sqrt(w)
-        # print(v)
-        return v
-
+    # calculating the tf-idf value
     def tf_idf(self, t, d):
         try:
             tf = 1 + math.log(self.term_frequency[d][t])
@@ -323,37 +332,58 @@ class SearchEngine:
             return 0
         return tf * idf
 
-    def query_vector_space(self, query):
+    def query_vector_space(self, query, print_):
         vector = []
-        for T in tqdm(self.document_frequency.keys(), 'CREATING QUERY VEC.SPACE'):
-            try:
-                tf = 1 + math.log(query.count(T))
-            except (KeyError, ValueError):
-                tf = 0
-            try:
-                idf = math.log((len(self.doc_id) / (self.document_frequency[T])), 10)
-            except KeyError:
-                idf = 0
-            vector.append(tf * idf)
+        if print_:
+            for T in tqdm(self.document_frequency.keys(), 'CREATING QUERY VEC.SPACE'):
+                try:
+                    tf = 1 + math.log(query.count(T))
+                except (KeyError, ValueError):
+                    tf = 0
+                try:
+                    idf = math.log((len(self.doc_id) / (self.document_frequency[T])), 10)
+                except KeyError:
+                    idf = 0
+                vector.append(tf * idf)
+        else:
+            for T in self.document_frequency.keys():
+                try:
+                    tf = 1 + math.log(query.count(T))
+                except (KeyError, ValueError):
+                    tf = 0
+                try:
+                    idf = math.log((len(self.doc_id) / (self.document_frequency[T])), 10)
+                except KeyError:
+                    idf = 0
+                vector.append(tf * idf)
         return np.array(vector)
 
     # cosine similarity method
     def cosine_similarity(self, a, b):
         return np.dot(a, b)/(np.linalg.norm(a)*np.linalg.norm(b))
 
-    def query_similarity(self, user_query_vector_space):
+    def query_similarity(self, user_query_vector_space, print_):
         i = 1
         lst = []
         test = []
         # heap = MaxHeap(len(self.doc_id) + 2)
-        for doc in tqdm(self.vector_space.keys(), 'CALCULATING Q SIMILARITY'):
-            similarity = self.cosine_similarity(self.vector_space[doc], user_query_vector_space)
-            if similarity != 0.0 and not math.isnan(similarity):
-                lst.append((i, similarity))
-                # insert item to heap
-                # heap.insert((i, similarity))
-            i += 1
-        print(test)
+        if print_:
+            for doc in tqdm(self.vector_space.keys(), 'CALCULATING Q SIMILARITY'):
+                similarity = self.cosine_similarity(self.vector_space[doc], user_query_vector_space)
+                if similarity != 0.0 and not math.isnan(similarity):
+                    lst.append((i, similarity))
+                    # insert item to heap
+                    # heap.insert((i, similarity))
+                i += 1
+        else:
+            for doc in self.vector_space.keys():
+                similarity = self.cosine_similarity(self.vector_space[doc], user_query_vector_space)
+                if similarity != 0.0 and not math.isnan(similarity):
+                    lst.append((i, similarity))
+                    # insert item to heap
+                    # heap.insert((i, similarity))
+                i += 1
+        # print(test)
         # print(lst)
         # heap.heap.remove((-1, sys.maxsize))
         # while (0, 0) in heap.heap:
@@ -534,8 +564,9 @@ class SearchEngine:
                                  '(you can use \"[a substring]\" in search)\n> '.upper())
             substring, string_without_substring = self.exstract_substring(user_queries)
 
-            user_query_vector_space = self.query_vector_space(user_queries)
-            top_k_documents = self.query_similarity(user_query_vector_space)
+            user_query_vector_space = self.query_vector_space(user_queries, True)
+            top_k_documents = self.query_similarity(user_query_vector_space, True)
+            print(top_k_documents)
 
             start_time = time.time()
             if user_queries == '':
