@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="19a512a9-4594-42f7-a58a-48bd37193e62" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Heap.py" beforeDir="false" afterPath="$PROJECT_DIR$/Heap.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,8 +16,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="77">
-              <caret line="343" column="8" selection-start-line="343" selection-start-column="8" selection-end-line="343" selection-end-column="8" />
+            <state relative-caret-position="247">
+              <caret line="351" column="8" selection-start-line="351" selection-start-column="8" selection-end-line="351" selection-end-column="8" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -29,8 +28,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Heap.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="38">
-              <caret line="161" lean-forward="true" selection-start-line="124" selection-end-line="161" />
+            <state relative-caret-position="154">
+              <caret line="147" selection-start-line="147" selection-end-line="170" selection-end-column="17" />
             </state>
           </provider>
         </entry>
@@ -46,13 +45,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>-۱</find>
-      <find>get_list_without_redundancy</find>
-      <find>change_caracters</find>
-      <find>bon_file</find>
-      <find>self.tf</find>
-      <find>self.df</find>
-      <find>tfidf</find>
       <find>tf</find>
       <find>idf</find>
       <find>********************</find>
@@ -71,11 +63,18 @@
       <find>extractMax</find>
       <find>Maxheap</find>
       <find>'-'</find>
-      <find>[1]</find>
       <find>heap.</find>
       <find>heapSort</find>
       <find>TOP_RANK_NUMBERS</find>
+      <find>vectorize_a_doc</find>
+      <find>top_k</find>
+      <find>champ</find>
       <find>query_similarity</find>
+      <find>CHAMPIONS_LISTS_LIMIT</find>
+      <find>[1]</find>
+      <find>query_vector_space</find>
+      <find>-1</find>
+      <find>شنا</find>
     </findStrings>
     <replaceStrings>
       <replace>removing_suffixes(</replace>
@@ -90,6 +89,7 @@
       <replace>max_heapify</replace>
       <replace>extract_max</replace>
       <replace>MaxHeap</replace>
+      <replace>vectoring_a_doc</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -150,7 +150,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.Heap">
+  <component name="RunManager" selected="Python.Main">
     <configuration name="Heap" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Information-Retrieval" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -232,7 +232,7 @@
       <workItem from="1625405305544" duration="24680000" />
       <workItem from="1625830884401" duration="12768000" />
       <workItem from="1625944194217" duration="7160000" />
-      <workItem from="1626095520391" duration="5025000" />
+      <workItem from="1626095520391" duration="20102000" />
     </task>
     <task id="LOCAL-00001" summary="starting phase 2">
       <created>1625405488690</created>
@@ -297,11 +297,25 @@
       <option name="project" value="LOCAL" />
       <updated>1625948219606</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="heap class changed. heap sort created">
+      <created>1626102160884</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1626102160884</updated>
+    </task>
+    <task id="LOCAL-00011" summary="creating champion lists is done">
+      <created>1626104470111</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1626104470111</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="153437000" />
+    <option name="totallyTimeSpent" value="168514000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -314,13 +328,14 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1295" height="695" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17138238" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.44858155" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32978722" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.2890071" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39893618" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -351,11 +366,13 @@
     <MESSAGE value="remove '' from df" />
     <MESSAGE value="heap class created" />
     <MESSAGE value="heap class moved to Main.py" />
-    <option name="LAST_COMMIT_MESSAGE" value="heap class moved to Main.py" />
+    <MESSAGE value="heap class changed. heap sort created" />
+    <MESSAGE value="creating champion lists is done" />
+    <option name="LAST_COMMIT_MESSAGE" value="creating champion lists is done" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Information_Retrieval$Main.coverage" NAME="Main Coverage Results" MODIFIED="1626101872240" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Information_Retrieval$Heap.coverage" NAME="Heap Coverage Results" MODIFIED="1626101866783" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Information_Retrieval$Main.coverage" NAME="Main Coverage Results" MODIFIED="1626125028661" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Information_Retrieval$Heap.coverage" NAME="Heap Coverage Results" MODIFIED="1626102220810" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$USER_HOME$/AppData/Roaming/Python/Python37/site-packages/pandas/util/_decorators.py">
@@ -395,15 +412,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Heap.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="38">
-          <caret line="161" lean-forward="true" selection-start-line="124" selection-end-line="161" />
+        <state relative-caret-position="154">
+          <caret line="147" selection-start-line="147" selection-end-line="170" selection-end-column="17" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="77">
-          <caret line="343" column="8" selection-start-line="343" selection-start-column="8" selection-end-line="343" selection-end-column="8" />
+        <state relative-caret-position="247">
+          <caret line="351" column="8" selection-start-line="351" selection-start-column="8" selection-end-line="351" selection-end-column="8" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>

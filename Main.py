@@ -154,7 +154,8 @@ class SearchEngine:
         self.SYMBOLS_TO_BE_REMOVED = '_ + = & ؟ ^ % $ . : ، \" \' | \\ / * ) ( ! - ؛'.split()
         self.SUFFIXES_TO_BE_REMOVED = ['ترین', 'تر', 'ات', 'ها', 'ی', '‌شان', 'ان']
         self.STOPWORDS_LIMIT = 20
-        self.TOP_RANK_NUMBERS = 4
+        self.TOP_RANK_NUMBERS = 20
+        self.CHAMPIONS_LISTS_LIMIT = 6
         self.CHARACTERS_MODIFICATION = {
             'آ': 'ا',
             'ي': 'ی',
@@ -261,10 +262,19 @@ class SearchEngine:
             # print(D)
             self.vector_space[D] = vector
 
-        # creating champion lists
-        for t in tqdm(self.all_tokens_frequencies.keys(), 'CREATING CHAMPION LISTS '):
-            vec = self.query_vector_space(t, False)
-            self.champion_lists.update({t: self.query_similarity(vec, False)})
+        # print(self.vector_space)
+
+        # # creating champion lists
+        # for t in tqdm(self.all_tokens_frequencies.keys(), 'CREATING CHAMPION LISTS '):
+        #     all_ranks = []
+        #     for d in self.doc_id:
+        #         tfidt = self.tf_idf(t, d)
+        #         all_ranks.append((d, tfidt))
+        #     ch_lists = heapSort(all_ranks, self.CHAMPIONS_LISTS_LIMIT)
+        #     # print(ch_lists)
+        #     self.champion_lists.update({t: ch_lists})
+
+        # print(self.champion_lists)
 
         # for i in self.champion_lists.keys():
         #     print(i, ':', self.champion_lists[i])
@@ -333,31 +343,13 @@ class SearchEngine:
         return tf * idf
 
     def query_vector_space(self, query, print_):
-        vector = []
-        if print_:
-            for T in tqdm(self.document_frequency.keys(), 'CREATING QUERY VEC.SPACE'):
-                try:
-                    tf = 1 + math.log(query.count(T))
-                except (KeyError, ValueError):
-                    tf = 0
-                try:
-                    idf = math.log((len(self.doc_id) / (self.document_frequency[T])), 10)
-                except KeyError:
-                    idf = 0
-                vector.append(tf * idf)
-        else:
-            for T in self.document_frequency.keys():
-                try:
-                    tf = 1 + math.log(query.count(T))
-                except (KeyError, ValueError):
-                    tf = 0
-                try:
-                    idf = math.log((len(self.doc_id) / (self.document_frequency[T])), 10)
-                except KeyError:
-                    idf = 0
-                vector.append(tf * idf)
-        return np.array(vector)
-
+        dic = dict()
+        for t in query.split():
+            if t not in dic.keys():
+                dic.update({t: 1})
+            else:
+                dic.update({t: dic[t] + 1})
+        return self.vectoring_a_doc(dic)
     # cosine similarity method
     def cosine_similarity(self, a, b):
         return np.dot(a, b)/(np.linalg.norm(a)*np.linalg.norm(b))
@@ -562,6 +554,9 @@ class SearchEngine:
             user_queries = input('enter a query \n'
                                  '(\"\\q\": quit the program)\n'
                                  '(you can use \"[a substring]\" in search)\n> '.upper())
+            using_champion_list = False
+            if input('DO YOU WANT TO USE CHAMPION LISTS? (Y/N') == 'Y':
+                using_champion_list = True
             substring, string_without_substring = self.exstract_substring(user_queries)
 
             user_query_vector_space = self.query_vector_space(user_queries, True)
@@ -679,6 +674,64 @@ class SearchEngine:
                         print('bad input!'.upper())
             print(45 * '- ')
 
+    def main2(self):
+        time.sleep(.6)
+        print('SEARCH ENGINE IS READY ({} seconds)'.format(self.process_time))
+        print(' ├─ {} DOCUMENTS '.format(len(self.content)))
+        print(' ├─ {} TOKENS '.format(len(self.term_doc_id)))
+        print(' ├─ {} STOPWORDS'.format(len(self.stopwords)))
+        for sw in range(len(self.stopwords)):
+            if sw != len(self.stopwords) - 1:
+                print(' │  ├─ {}/{}:\t({}) \"{}\"'
+                      .format(sw + 1, len(self.stopwords), self.stopwords_count[sw], self.stopwords[sw]))
+            else:
+                print(' │  └─ {}/{}:\t({}) \"{}\"'
+                      .format(sw + 1, len(self.stopwords), self.stopwords_count[sw], self.stopwords[sw]))
+        print(' └─ {} DISTINCT VALUES WITHOUT STOPWORDS'.format(len(self.inverted_index)))
+
+        while True:
+            user_queries = input('enter a query \n'
+                                 '(\"\\q\": quit the program)\n'.upper())
+            using_champion_list = False
+
+            user_queries_terms = [self.normalize(t) for t in user_queries.split()]
+            for i in user_queries_terms:
+                if i in self.stopwords:
+                    print(' └─ WORD {} IS A STOP-WORD'.format(i))
+                    user_queries_terms.remove(i)
+                    continue
+                if i not in self.inverted_index.keys():
+                    print(' └─ WORD {} IS NOT IN DOCUMENTS'.format(i))
+                    user_queries_terms.remove(i)
+
+            if input('DO YOU WANT TO USE CHAMPION LISTS? (Y/N)') == 'Y':
+                using_champion_list = True
+
+            if using_champion_list:
+                pass
+            else:
+                query_vector = self.query_vector_space(user_queries, True)
+                top_k_result = self.query_similarity(query_vector, True)
+                print("TOP {} RESULTS:".format(self.TOP_RANK_NUMBERS))
+                [print(' └─ {} '.format(i[0])) for i in top_k_result]
+                while True:
+                    res = input('select on of the results to show the information (-1 to cancel)\n> '.upper())
+                    for fa, en in zip(self.FA_NUMS, self.EN_NUMS):
+                        res = res.replace(fa, en)
+                    if res == '-1':
+                        print('canceled'.upper())
+                        break
+                    else:
+                        try:
+                            print('DOC-ID : ' + str(self.doc_id[int(res) - 1]))
+                            print('LINK   : ' + self.url[int(res) - 1])
+                            print('CONTENT: \n' + self.content[int(res) - 1])
+
+                        except Exception as e:
+                            print(e)
+                            print('bad input!'.upper())
+                print(45 * '- ')
+
 
 if __name__ == '__main__':
-    SearchEngine().main()
+    SearchEngine().main2()
